@@ -1,0 +1,23 @@
+{
+  "name": "movie_api",
+  "version": "1.0.0",
+  "description": "This code has the objective of building the server-side components for a \"movies\" web application. Users will be able to access information about different movies, directors, genres, etc.\r They will also be able to sign up, update their personal information and create a list of their favourite movies.\r Maybe even more?",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daniswhoiam/movie_api.git"
+  },
+  "author": "daniswhoiam",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/daniswhoiam/movie_api/issues"
+  },
+  "homepage": "https://github.com/daniswhoiam/movie_api#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
+  }
+}

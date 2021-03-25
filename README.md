@@ -9,6 +9,7 @@ Maybe even more?
 * CSS3
 * JavaScript (ES5+)
 * Node.js 14.16.0
+* For more, see "package-lock.json"
 
 ## Last Updated
 24.03.2021
