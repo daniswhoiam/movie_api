@@ -45,8 +45,8 @@
             <p>A JSON object holding data about all movies in the database:</p>
             <p>
               [{<br />
-              "title": "sampleTitle",<br />
-              "year": "sampleYear"<br />
+              "Title": "sampleTitle",<br />
+              "ReleaseYear": "sampleYear"<br />
               },<br />
               ...]<br />
             </p>
@@ -64,17 +64,17 @@
             <p>A JSON object holding data about the requested movie:</p>
             <p>
               {<br />
-              "title": "sampleTitle",<br />
-              "year": "sampleYear"<br />
+              "Title": "sampleTitle",<br />
+              "ReleaseYear": "sampleYear"<br />
               }
             </p>
           </td>
         </tr>
         <tr>
           <th scope="row">Return data about a genre by title</th>
-          <td>/genres/:title</td>
+          <td>/genres/:name</td>
           <td>GET</td>
-          <td>title</td>
+          <td>name</td>
           <td>No request body needed.</td>
           <td>
             In the future: A JSON object with the genre data. Currently plain
@@ -103,9 +103,10 @@
             <p>A JSON object with user data:</p>
             <p>
               {<br />
-              "username": "sampleUsername",<br />
-              "password": "samplePassword",<br />
-              "ID": "sampleID"<br />
+              "Username": "sampleUsername",<br />
+              "Password": "samplePassword",<br />
+              "Email": "sample@email.com",<br />
+              "Birth": "1998-02-01"<br />
               }
             </p>
           </td>
@@ -137,8 +138,8 @@
             <p>A JSON object holding data about the movie:</p>
             <p>
               {<br />
-              "title": "sampleTitle",<br />
-              "year": "sampleYear",<br />
+              "Title": "sampleTitle",<br />
+              "ReleaseYear": "sampleYear",<br />
               "movieID": "sampleID" }
             </p>
           </td>
