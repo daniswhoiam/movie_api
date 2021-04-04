@@ -88,30 +88,14 @@ Expecting JSON in this format:
 }
 */
 app.post('/users', (req, res) => {
-  Users.findOne({ Username: req.body.username })
+  Users.create({
+    Username: req.body.username,
+    Password: req.body.password,
+    Email: req.body.email,
+    Birth: req.body.birth
+  })
     .then(user => {
-      if (user) {
-        res
-          .status(400)
-          .send(
-            req.body.username +
-              ' already exists. Please use a different username.'
-          );
-      } else {
-        Users.create({
-          Username: req.body.username,
-          Password: req.body.password,
-          Email: req.body.email,
-          Birth: req.body.birth
-        })
-          .then(user => {
-            res.status(201).json(user);
-          })
-          .catch(err => {
-            console.error(err);
-            res.status(500).send('Error: ' + err);
-          });
-      }
+      res.status(201).json(user);
     })
     .catch(err => {
       console.error(err);
@@ -128,22 +112,20 @@ We'll expect JSON in this format
   Email: String,
   Birth: Date
 }
+Only fields included in the request body will be updated. Not defined fields will be ignored.
 */
 app.put('/users/:username', (req, res) => {
   Users.findOneAndUpdate(
     { Username: req.params.username },
     {
-      $set: {
-        Username: req.body.Username,
-        Password: req.body.Password,
-        Email: req.body.Email,
-        Birth: req.body.Birth
-      }
+      $set: req.body
     },
     { new: true }
   )
     .then(user => {
-      res.status(202).json(user);
+      user
+        ? res.status(202).json(user)
+        : res.status(404).send('There is no user with this username.');
     })
     .catch(err => {
       console.error(err);
@@ -151,7 +133,7 @@ app.put('/users/:username', (req, res) => {
     });
 });
 
-// Allow users to add a move to their list of favorites
+// Allow users to add a movie to their list of favorites
 app.patch('/users/:username/movies/:movieID', (req, res) => {
   Users.findOneAndUpdate(
     { Username: req.params.username },
@@ -172,7 +154,7 @@ app.patch('/users/:username/movies/:movieID', (req, res) => {
 });
 
 // Allow users to remove a movie from their list of favorites
-app.patch('/users/:username/movies/:movieID', (req, res) => {
+app.delete('/users/:username/movies/:movieID', (req, res) => {
   Users.findOneAndUpdate(
     { Username: req.params.username },
     {
@@ -206,7 +188,7 @@ app.delete('/users/:username', (req, res) => {
 });
 
 // Error handling
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   console.error(err.stack);
   res.status(500).send('Something went wrong.');
 });
