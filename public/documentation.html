@@ -42,10 +42,18 @@
           <td>No query parameters.</td>
           <td>No request body needed.</td>
           <td>
-            <p>A JSON object holding data about all movies in the database:</p>
+            <p>
+              An array holding all the movies from the database in JSON format:
+            </p>
             <p>
               [{<br />
               "Title": "sampleTitle",<br />
+              "Description": "...",<br />
+              "ReleaseYear": "sampleYear"<br />
+              },<br />
+              {<br />
+              "Title": "sampleTitle",<br />
+              "Description": "...",<br />
               "ReleaseYear": "sampleYear"<br />
               },<br />
               ...]<br />
@@ -65,6 +73,7 @@
             <p>
               {<br />
               "Title": "sampleTitle",<br />
+              "Description": "...",<br />
               "ReleaseYear": "sampleYear"<br />
               }
             </p>
@@ -72,14 +81,24 @@
         </tr>
         <tr>
           <th scope="row">Return data about a genre by title</th>
-          <td>/genres/:name</td>
+          <td>/genres/:title</td>
           <td>GET</td>
           <td>name</td>
           <td>No request body needed.</td>
           <td>
-            In the future: A JSON object with the genre data. Currently plain
-            text informing about the success of the request.<br />Example:
-            "Successfully retrieved data about genre: sampleTitle"
+            A JSON object with the genre data:<br />
+            {<br />
+            "Name": "Science Fiction",<br />
+            "Description": "Science Fiction (or sci-fi) is a film genre that
+            uses speculative, fictional science-based depictions of phenomena
+            that are not fully accepted by mainstream science, such as
+            extraterrestrial lifeforms, alien worlds, extrasensory perception
+            and time travel, along with futuristic elements such as spacecraft,
+            robots, cyborgs, interstellar travel or other technologies. Science
+            fiction films have often been used to focus on political or social
+            issues, and to explore philosophical issues like the human
+            condition."<br />
+            }
           </td>
         </tr>
         <tr>
@@ -89,9 +108,16 @@
           <td>name</td>
           <td>No request body needed.</td>
           <td>
-            In the future: A JSON object with the genre data. Currently plain
-            text informing about the success of the request.<br />Example:
-            "Successfully retrieved data about director: sampleName"
+            A JSON object with the genre data:<br />
+            {<br />
+            "Name": "Steven Allan Spielberg",<br />
+            "Bio": "Steven Allan Spielberg is an American film director,
+            producer and screenwriter. He began his career in the New Hollywood
+            era, and is one of the most commercially successful directors in
+            history.",<br />
+            "Birth": "1946-12-18T00:00:00.000Z",<br />
+            "Death": null<br />
+            }
           </td>
         </tr>
         <tr>
@@ -103,73 +129,110 @@
             <p>A JSON object with user data:</p>
             <p>
               {<br />
-              "Username": "sampleUsername",<br />
-              "Password": "samplePassword",<br />
-              "Email": "sample@email.com",<br />
-              "Birth": "1998-02-01"<br />
+              "username": "test999",<br />
+              "password": "sdf54sd65g6sd8fe48s",<br />
+              "email": "test999@test.de",<br />
+              "birth": "2000-01-01"<br />
               }
             </p>
           </td>
           <td>
-            In the future: A JSON object with the genre data. Currently plain
-            text informing about the success of the request.<br />Example:
-            "Successfully created user."
+            A JSON object with the data of the newly created user:<br />
+            {<br />
+            "FavoriteMovies": [],<br />
+            "_id": "60697ba2e27b431378879e0e",<br />
+            "Username": "test999",<br />
+            "Password": "sdf54sd65g6sd8fe48s",<br />
+            "Email": "test999@test.de",<br />
+            "Birth": "2000-01-01T00:00:00.000Z",<br />
+            "__v": 0<br />
+            }
           </td>
         </tr>
         <tr>
-          <th scope="row">Allow users to update their username</th>
-          <td>/users/:userID/:username</td>
+          <th scope="row">Allow users to update their data</th>
+          <td>/users/:username</td>
           <td>PUT</td>
-          <td>userID, username</td>
-          <td>No request body needed.</td>
+          <td>username</td>
           <td>
-            Plain text informing about the success of the request.<br />Example:
-            "The username of user #1 was successfully updated."
+            <p>A JSON object with user data:</p>
+            <p>
+              {<br />
+              "username": "test999",<br />
+              "password": "sdf54sd65g6sd8fe48s",<br />
+              "email": "test999@test.de",<br />
+              "birth": "1998-02-01"<br />
+              }
+            </p>
+            <p>
+              It is enough to include one information to update, e.g. only
+              username.
+            </p>
+          </td>
+          <td>
+            A JSON object with the data of the updated user data:<br />
+            {<br />
+            "FavoriteMovies": [],<br />
+            "_id": "60697ba2e27b431378879e0e",<br />
+            "Username": "test999",<br />
+            "Password": "sdf54sd65g6sd8fe48s",<br />
+            "Email": "test999@test.de",<br />
+            "Birth": "1998-02-01T00:00:00.000Z",<br />
+            "__v": 0<br />
+            }
           </td>
         </tr>
         <tr>
           <th scope="row">
             Allow users to add a movie to their list of favorites
           </th>
-          <td>/users/:userID/favorites</td>
+          <td>/users/:username/movies/:movieID</td>
           <td>PATCH</td>
-          <td>userID</td>
+          <td>username, movieID</td>
+          <td>No request body needed.</td>
           <td>
-            <p>A JSON object holding data about the movie:</p>
-            <p>
-              {<br />
-              "Title": "sampleTitle",<br />
-              "ReleaseYear": "sampleYear",<br />
-              "movieID": "sampleID" }
-            </p>
-          </td>
-          <td>
-            Plain text informing about the success of the request.<br />Example:
-            "The movie has been successfully added to user #1's favorites list."
+            A JSON object with the data of the updated user data:<br />
+            {<br />
+            "FavoriteMovies": ["606616428cf62e963ea9b872"],<br />
+            "_id": "60697ba2e27b431378879e0e",<br />
+            "Username": "test999",<br />
+            "Password": "sdf54sd65g6sd8fe48s",<br />
+            "Email": "test999@test.de",<br />
+            "Birth": "1998-02-01T00:00:00.000Z",<br />
+            "__v": 0<br />
+            }
           </td>
         </tr>
         <tr>
           <th scope="row">
             Allow users to remove a movie from their list of favorites
           </th>
-          <td>/users/:userID/favorites/:movieID</td>
-          <td>PATCH</td>
-          <td>userID, movieID</td>
+          <td>/users/:username/movies/:movieID</td>
+          <td>DELETE</td>
+          <td>username, movieID</td>
           <td>No request body needed.</td>
           <td>
-            Plain text informing about the success of the request.<br />Example:
-            "The movie #222 was removed from user #1's favorites list."
+            A JSON object with the data of the updated user data:<br />
+            {<br />
+            "FavoriteMovies": [],<br />
+            "_id": "60697ba2e27b431378879e0e",<br />
+            "Username": "test999",<br />
+            "Password": "sdf54sd65g6sd8fe48s",<br />
+            "Email": "test999@test.de",<br />
+            "Birth": "1998-02-01T00:00:00.000Z",<br />
+            "__v": 0<br />
+            }
           </td>
         </tr>
         <tr>
           <th scope="row">Allow existing users to deregister.</th>
-          <td>/users/:userID</td>
+          <td>/users/:username</td>
           <td>DELETE</td>
-          <td>userID</td>
+          <td>username</td>
           <td>No request body needed.</td>
           <td>
             Plain text informing about the success of the request.<br />Example:
-            "User #1 was removed from the system."
+            "test999 was deleted."
           </td>
         </tr>
       </tbody>
