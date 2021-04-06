@@ -23,59 +23,79 @@ app.use(express.static('public'));
 
 app.use(bodyParser.json());
 
+let auth = require('./auth')(app);
+const passport = require('passport');
+require('./passport');
+
 // Return a list of all movies
-app.get('/movies', (req, res) => {
-  Movies.find()
-    .then(movies => {
-      res.status(200).json(movies);
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    });
-});
+app.get(
+  '/movies',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Movies.find()
+      .then(movies => {
+        res.status(200).json(movies);
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+  }
+);
 
 // Return data about a single movie by title
-app.get('/movies/:title', (req, res) => {
-  Movies.findOne({ Title: req.params.title })
-    .then(movie => {
-      movie
-        ? res.status(200).json(movie)
-        : res.status(404).send('No movie with this title was found.');
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    });
-});
+app.get(
+  '/movies/:title',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Movies.findOne({ Title: req.params.title })
+      .then(movie => {
+        movie
+          ? res.status(200).json(movie)
+          : res.status(404).send('No movie with this title was found.');
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+  }
+);
 
 // Return data about a genre by title
-app.get('/genres/:title', (req, res) => {
-  Movies.findOne({ 'Genre.Name': req.params.title })
-    .then(movie => {
-      movie
-        ? res.status(200).json(movie['Genre'])
-        : res.status(404).send('No genre with this title was found.');
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    });
-});
+app.get(
+  '/genres/:title',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Movies.findOne({ 'Genre.Name': req.params.title })
+      .then(movie => {
+        movie
+          ? res.status(200).json(movie['Genre'])
+          : res.status(404).send('No genre with this title was found.');
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+  }
+);
 
 // Return data about a director by name
-app.get('/directors/:name', (req, res) => {
-  Movies.findOne({ 'Director.Name': req.params.name })
-    .then(movie => {
-      movie
-        ? res.status(200).json(movie['Director'])
-        : res.status(404).send('No director with this name was found.');
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    });
-});
+app.get(
+  '/directors/:name',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Movies.findOne({ 'Director.Name': req.params.name })
+      .then(movie => {
+        movie
+          ? res.status(200).json(movie['Director'])
+          : res.status(404).send('No director with this name was found.');
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+  }
+);
 
 // Allow new users to register
 /*
@@ -114,78 +134,94 @@ We'll expect JSON in this format
 }
 Only fields included in the request body will be updated. Not defined fields will be ignored.
 */
-app.put('/users/:username', (req, res) => {
-  Users.findOneAndUpdate(
-    { Username: req.params.username },
-    {
-      $set: req.body
-    },
-    { new: true }
-  )
-    .then(user => {
-      user
-        ? res.status(202).json(user)
-        : res.status(404).send('There is no user with this username.');
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    });
-});
+app.put(
+  '/users/:username',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Users.findOneAndUpdate(
+      { Username: req.params.username },
+      {
+        $set: req.body
+      },
+      { new: true }
+    )
+      .then(user => {
+        user
+          ? res.status(202).json(user)
+          : res.status(404).send('There is no user with this username.');
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+  }
+);
 
 // Allow users to add a movie to their list of favorites
-app.patch('/users/:username/movies/:movieID', (req, res) => {
-  Users.findOneAndUpdate(
-    { Username: req.params.username },
-    {
-      $addToSet: {
-        FavoriteMovies: req.params.movieID
-      }
-    },
-    { new: true }
-  )
-    .then(user => {
-      res.status(202).json(user);
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    });
-});
+app.patch(
+  '/users/:username/movies/:movieID',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Users.findOneAndUpdate(
+      { Username: req.params.username },
+      {
+        $addToSet: {
+          FavoriteMovies: req.params.movieID
+        }
+      },
+      { new: true }
+    )
+      .then(user => {
+        res.status(202).json(user);
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+  }
+);
 
 // Allow users to remove a movie from their list of favorites
-app.delete('/users/:username/movies/:movieID', (req, res) => {
-  Users.findOneAndUpdate(
-    { Username: req.params.username },
-    {
-      $pull: {
-        FavoriteMovies: req.params.movieID
-      }
-    },
-    { new: true }
-  )
-    .then(user => {
-      res.status(202).json(user);
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    });
-});
+app.delete(
+  '/users/:username/movies/:movieID',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Users.findOneAndUpdate(
+      { Username: req.params.username },
+      {
+        $pull: {
+          FavoriteMovies: req.params.movieID
+        }
+      },
+      { new: true }
+    )
+      .then(user => {
+        res.status(202).json(user);
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+  }
+);
 
 // Allow existing users to deregister
-app.delete('/users/:username', (req, res) => {
-  Users.findOneAndRemove({ Username: req.params.username })
-    .then(user => {
-      user
-        ? res.status(202).send(req.params.username + ' was deleted.')
-        : res.status(404).send(req.params.username + ' was not found.');
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    });
-});
+app.delete(
+  '/users/:username',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Users.findOneAndRemove({ Username: req.params.username })
+      .then(user => {
+        user
+          ? res.status(202).send(req.params.username + ' was deleted.')
+          : res.status(404).send(req.params.username + ' was not found.');
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+  }
+);
 
 // Error handling
 app.use((err, req, res) => {
