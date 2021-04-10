@@ -158,10 +158,10 @@ app.post(
 
     let hashedPassword = Users.hashPassword(req.body.Password);
     Users.create({
-      Username: req.body.username,
+      Username: req.body.Username,
       Password: hashedPassword,
-      Email: req.body.email,
-      Birth: req.body.birth
+      Email: req.body.Email,
+      Birth: req.body.Birth
     })
       .then(user => {
         res.status(201).json(user);
