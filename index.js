@@ -186,8 +186,27 @@ Only fields included in the request body will be updated. Not defined fields wil
 */
 app.put(
   '/users/:username',
-  passport.authenticate('jwt', { session: false }),
+  [
+    check('Username', 'Username is required')
+      .not()
+      .isEmpty(),
+    check(
+      'Username',
+      'Username contains non alphanumeric characters - not allowed.'
+    ).isAlphanumeric(),
+    check('Password', 'Password is required.')
+      .not()
+      .isEmpty(),
+    check('Email', 'Email does not appear to be valid.').isEmail(),
+    passport.authenticate('jwt', { session: false })
+  ],
   (req, res) => {
+    // Check validation object for errors
+    let errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+
     Users.findOneAndUpdate(
       { Username: req.params.username },
       {
