@@ -9,7 +9,7 @@ const app = express(),
   Movies = Models.Movie,
   Users = Models.User;
 
-const allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
+const allowedOrigins = ['http://localhost:8080', 'http://localhost:1234', 'http://testsite.com'];
 
 // Allow only certain domains to access the API
 const cors = require('cors');
@@ -57,6 +57,7 @@ require('./passport');
 // Return a list of all movies
 app.get(
   '/movies',
+  // passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Movies.find()
       .then(movies => {
