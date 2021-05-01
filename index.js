@@ -208,7 +208,7 @@ app.put(
     }
 
     Users.findOneAndUpdate(
-      { Username: req.params.username },
+      { Username: req.params.Username },
       {
         $set: req.body
       },
