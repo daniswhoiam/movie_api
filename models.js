@@ -26,20 +26,20 @@ let userSchema = mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    validate: [
-      usernameValidator,
-      'The username you chose already exists. Please choose another one.'
-    ]
+    validate: {
+      validator: usernameValidator,
+      message: 'The username you chose already exists. Please choose another one.'
+    }
   },
   Password: { type: String, required: true },
   Email: {
     type: String,
     required: true,
     unique: true,
-    validate: [
-      emailValidator,
-      'The email you chose is already used by another user. Please choose another one.'
-    ]
+    validate: {
+      validator: emailValidator,
+      message: 'The email you chose is already used by another user. Please choose another one.'
+    }
   },
   Birth: Date,
   FavoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }]
