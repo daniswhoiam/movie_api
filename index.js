@@ -207,6 +207,10 @@ app.put(
       return res.status(422).json({ errors: errors.array() });
     }
 
+    if (req.body.Password) {
+      let hashedPassword = Users.hashPassword(req.body.Password);
+      req.body.Password = hashedPassword;
+    }
     Users.findOneAndUpdate(
       { Username: req.params.username },
       {
