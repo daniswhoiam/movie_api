@@ -9,7 +9,7 @@ const app = express(),
   Movies = Models.Movie,
   Users = Models.User;
 
-const allowedOrigins = ['http://localhost:8080', 'http://localhost:1234', 'http://testsite.com'];
+const allowedOrigins = ['http://localhost:8080', 'http://localhost:1234', 'http://testsite.com', 'https://daniswhoiam-myflix.netlify.app'];
 
 // Allow only certain domains to access the API
 const cors = require('cors');
