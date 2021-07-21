@@ -124,6 +124,52 @@ app.get(
   }
 );
 
+// Allow to get user information
+app.get(
+  '/users/:username',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    // Check validation object for errors
+    let errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(403).json({ errors: errors.array() });
+    }
+
+    Users.findOne({ username: req.params.username})
+      .then(user => {
+        user
+          ? res.status(202).json(user)
+          : res.status(404).send('There is no user with this username.');
+      }).catch(err => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+  }
+);
+
+// Allow to get the user's favorite movies
+app.get(
+  '/users/:username/favoritemovies',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    // Check validation object for errors
+    let errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(403).json({ errors: errors.array() });
+    }
+
+    Users.findOne({ username: req.params.username})
+      .then(user => {
+        user
+          ? res.status(202).send(user.FavoriteMovies)
+          : res.status(404).send('There is no user with this username.');
+      }).catch(err => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+  }
+)
+
 // Allow new users to register
 /*
 Expecting JSON in this format:

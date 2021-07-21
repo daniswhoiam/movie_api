@@ -235,6 +235,36 @@
             "test999 was deleted."
           </td>
         </tr>
+        <tr>
+          <th scope="row">Allow to get user information.</th>
+          <td>/users/:username</td>
+          <td>GET</td>
+          <td>username</td>
+          <td>No request body needed.</td>
+          <td>
+            A JSON object with the user data:<br />
+            {<br />
+            "FavoriteMovies": [],<br />
+            "_id": "60697ba2e27b431378879e0e",<br />
+            "Username": "test999",<br />
+            "Password": "sdf54sd65g6sd8fe48s",<br />
+            "Email": "test999@test.de",<br />
+            "Birth": "1998-02-01T00:00:00.000Z",<br />
+            "__v": 0<br />
+            }
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Allow to get the user's favorite movies.</th>
+          <td>/users/:username/favoritemovies</td>
+          <td>GET</td>
+          <td>username</td>
+          <td>No request body needed.</td>
+          <td>
+            An array containing the favorite movies. Example:<br />
+            ["606616428cf62e963ea9b872"] 
+          </td>
+        </tr>
       </tbody>
     </table>
     <script
