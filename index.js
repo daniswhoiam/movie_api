@@ -332,7 +332,7 @@ app.delete(
     Users.findOneAndRemove({ Username: req.params.username })
       .then(user => {
         user
-          ? res.status(202).send(req.params.username + ' was deleted.')
+          ? res.status(200).send(req.params.username + ' was deleted.')
           : res.status(404).send(req.params.username + ' was not found.');
       })
       .catch(err => {
